@@ -24,10 +24,6 @@ body * {
   background-position: center bottom;
 }
 
-.img__happy {
-  margin-left: 70px;
-}
-
 .navbar-brand {
   width: 100px;
   background-color: #0d28a6;
@@ -69,7 +65,6 @@ body * {
 
 .container__text {
   margin-top: -50px;
-  padding-left: 120px;
 }
 
 ul {
@@ -106,7 +101,7 @@ ul {
   padding: 26px;
   border-radius: 8px;
   border: solid 1px #d0d0d0;
-  height: 195px;
+  height: auto;
 }
 
 .whyicon {
@@ -132,9 +127,8 @@ ul {
 .box {
   border-radius: 13px;
   background: var(--primary-dark-blue-04, #0d28a6);
-  width: 1300px;
-  height: 325px;
-  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .getting__title {
@@ -157,7 +151,7 @@ ul {
 
 .faq {
   margin-top: 100px;
-  margin-bottom: 200px;
+  margin-bottom: 150px;
 }
 
 .testimoni {
@@ -166,7 +160,7 @@ ul {
 
 .testimoni__img {
   border-radius: 100%;
-  width: 80px;
+  width: 10vw;
   height: auto;
   margin-left: 46px;
 }
@@ -206,4 +200,84 @@ ul {
 .accordion__list {
   margin-bottom: 16px;
   border-radius: 4px;
+}
+
+@media (min-width: 374px) and (max-width: 767px) {
+  .container__text {
+    padding-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .main {
+    height: 30%;
+    width: 100%;
+  }
+
+  .mobil {
+    height: auto;
+    width: 345px;
+    padding-top: 24px;
+    right: 0;
+    overflow: hidden;
+  }
+
+  .img__happy {
+    width: 90%;
+    height: auto;
+    margin-bottom: 30px;
+  }
+
+  .sublist {
+    padding: 0px 16px 0px 16px;
+  }
+
+  .list {
+    font-size: 14px;
+    padding: 6px 40px;
+  }
+
+  .why__us {
+    margin-top: 50px;
+  }
+
+  .head__sub,
+  .head__title {
+    text-align: center;
+  }
+
+  .carousel__box {
+    height: 40vh;
+    width: 90vw;
+    background-color: #f1f3ff;
+    border-radius: 8px;
+  }
+
+  .carousel__content {
+    height: 270px;
+  }
+
+  .getting__title {
+    font-size: 24px;
+  }
+
+  .getting__sub {
+    font-size: 14px;
+    padding: auto;
+  }
+
+  .faq {
+    margin-bottom: 50px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .container__text {
+    padding-top: 40px;
+  }
+
+  .mobil {
+    height: auto;
+    width: 50vw;
+  }
 }
