@@ -38,6 +38,62 @@
               <button
                 class="navbar-toggler"
                 type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasRight"
+                aria-controls="offcanvasRight"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div
+                class="offcanvas offcanvas-end w-50"
+                tabindex="-1"
+                id="offcanvasRight"
+              >
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasRightLabel">
+                    <strong>BCR</strong>
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="offcanvas-body">
+                  <span class="navbar-text ms-auto">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                      <li class="nav-item nav__spacing">
+                        <a class="nav-link" href="#">Our Service</a>
+                      </li>
+                      <li class="nav-item nav__spacing">
+                        <a class="nav-link" href="#">Why Us</a>
+                      </li>
+                      <li class="nav-item nav__spacing">
+                        <a class="nav-link" href="#">Testimonial</a>
+                      </li>
+                      <li class="nav-item nav__spacing">
+                        <a class="nav-link" href="#">FAQ</a>
+                      </li>
+                      <button type="button" class="btn__global">
+                        Register
+                      </button>
+                    </ul>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <!-- Old Navbar -->
+        <!-- <div class="container">
+          <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#"></a>
+              <button
+                class="navbar-toggler"
+                type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbarText"
                 aria-controls="navbarText"
@@ -67,7 +123,8 @@
               </div>
             </div>
           </nav>
-        </div>
+        </div> -->
+
         <!-- Isi -->
         <div class="container pt-4">
           <div class="row align-items-center">
@@ -189,16 +246,20 @@
         </div>
         <div class="owl-carousel owl-theme">
           <div class="item carousel__box">
-            <div class="d-flex align-items-center carousel__content">
-              <div class="">
+            <div class="row d-flex carousel__content">
+              <div
+                class="col-12 col-md-3 d-flex justify-content-center align-items-center pt-3"
+              >
                 <img
                   src="img/img-testimoni.png"
                   alt=""
                   class="testimoni__img"
                 />
               </div>
-              <div class="flex-column review">
-                <div>
+              <div
+                class="col-12 col-md-9 flex-column my-auto review__container"
+              >
+                <div class="star">
                   <svg
                     width="80"
                     height="16"
@@ -236,24 +297,29 @@
                 </div>
                 <div
                   class="testimoni__text"
-                  style="font-weight: 600; padding: 0px"
+                  style="font-weight: 600; padding-top: 8px"
                 >
                   John Dee 32, Bromo
                 </div>
               </div>
             </div>
           </div>
+
           <div class="item carousel__box">
-            <div class="d-flex align-items-center carousel__content">
-              <div class="">
+            <div class="row d-flex carousel__content">
+              <div
+                class="col-12 col-md-3 d-flex justify-content-center align-items-center pt-3"
+              >
                 <img
                   src="img/img-testimoni.png"
                   alt=""
                   class="testimoni__img"
                 />
               </div>
-              <div class="flex-column review">
-                <div>
+              <div
+                class="col-12 col-md-9 flex-column my-auto review__container"
+              >
+                <div class="star">
                   <svg
                     width="80"
                     height="16"
@@ -291,24 +357,29 @@
                 </div>
                 <div
                   class="testimoni__text"
-                  style="font-weight: 600; padding: 0px"
+                  style="font-weight: 600; padding-top: 8px"
                 >
                   John Dee 32, Bromo
                 </div>
               </div>
             </div>
           </div>
+
           <div class="item carousel__box">
-            <div class="d-flex align-items-center carousel__content">
-              <div class="">
+            <div class="row d-flex carousel__content">
+              <div
+                class="col-12 col-md-3 d-flex justify-content-center align-items-center pt-3"
+              >
                 <img
                   src="img/img-testimoni.png"
                   alt=""
                   class="testimoni__img"
                 />
               </div>
-              <div class="flex-column review">
-                <div>
+              <div
+                class="col-12 col-md-9 flex-column my-auto review__container"
+              >
+                <div class="star">
                   <svg
                     width="80"
                     height="16"
@@ -346,7 +417,7 @@
                 </div>
                 <div
                   class="testimoni__text"
-                  style="font-weight: 600; padding: 0px"
+                  style="font-weight: 600; padding-top: 8px"
                 >
                   John Dee 32, Bromo
                 </div>
@@ -559,16 +630,16 @@
           </div>
           <div class="col-12 col-md-3 d-flex flex-column">
             <div class="ordinary__text">Connect with us</div>
-            <!-- <img
+            <img
               src="/img/social.png"
               width="224px"
               height="35px"
-              class="mt-3"
-            /> -->
+              class="mt-1"
+            />
           </div>
           <div class="col-12 col-md-3 d-flex flex-column">
             <div class="ordinary__text">Copyright Binar 2022</div>
-            <!-- <a href="" class="navbar-brand mt-3"></a> -->
+            <a href="" class="navbar-brand mt-1 mb-5"></a>
           </div>
         </div>
       </div>

@@ -19,7 +19,6 @@ body * {
 }
 
 .mobil {
-  background-image: url(/img/bg.png);
   background-repeat: no-repeat;
   background-position: center bottom;
 }
@@ -160,9 +159,8 @@ ul {
 
 .testimoni__img {
   border-radius: 100%;
-  width: 10vw;
-  height: auto;
-  margin-left: 46px;
+  width: 80px !important;
+  height: 80px !important;
 }
 
 .testimoni__text {
@@ -170,6 +168,10 @@ ul {
   font-weight: 300;
   line-height: 20px;
   padding: 8px 0px 8px 0px;
+}
+
+.review__container {
+  margin-left: -15px;
 }
 
 .review {
@@ -202,7 +204,7 @@ ul {
   border-radius: 4px;
 }
 
-@media (min-width: 374px) and (max-width: 767px) {
+@media (min-width: 1px) and (max-width: 767px) {
   .container__text {
     padding-top: 40px;
     padding-left: 20px;
@@ -216,9 +218,8 @@ ul {
 
   .mobil {
     height: auto;
-    width: 345px;
+    width: 100%;
     padding-top: 24px;
-    right: 0;
     overflow: hidden;
   }
 
@@ -247,7 +248,7 @@ ul {
   }
 
   .carousel__box {
-    height: 40vh;
+    height: 53vh;
     width: 90vw;
     background-color: #f1f3ff;
     border-radius: 8px;
@@ -269,15 +270,43 @@ ul {
   .faq {
     margin-bottom: 50px;
   }
+
+  .review__container {
+    margin-left: 0px;
+  }
+
+  .testimoni__text {
+    padding: 18px 32px 8px 32px;
+  }
+
+  .star {
+    text-align: center;
+    padding-top: 18px;
+  }
+
+  .btn__global {
+    width: auto;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1439px) {
+  .main {
+    width: 100%;
+    height: 75vh;
+  }
+
   .container__text {
-    padding-top: 40px;
+    padding: 40px 0 0 20px;
   }
 
   .mobil {
     height: auto;
-    width: 50vw;
+    width: 100%;
+  }
+
+  .img__happy {
+    width: 90%;
+    height: auto;
+    margin-bottom: 30px;
   }
 }
