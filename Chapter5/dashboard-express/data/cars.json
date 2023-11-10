@@ -1,0 +1,4 @@
+[
+  { "id": "1", "name": "avanza", "price": "10000", "car_foto_url": "test.jpg" },
+  { "id": "2", "name": "bmw", "price": "20000", "car_foto_url": "bmw.jpg" }
+]

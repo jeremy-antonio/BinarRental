@@ -1,0 +1,24 @@
+.form-wrapper {
+  background-color: white;
+  padding: 24px 36px;
+}
+
+.form-container {
+  display: grid;
+  gap: 14px;
+}
+
+.btn-style {
+  padding: 4px 12px;
+  border: 0.5px solid black;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.listing {
+  margin-bottom: 12px;
+}
