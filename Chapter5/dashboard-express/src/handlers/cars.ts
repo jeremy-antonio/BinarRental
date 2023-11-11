@@ -51,20 +51,30 @@ class CarsHandler {
     res.status(201).send(response);
   }
 
-  async updateCar(req: Request, {}, res: Response) {
-    const payload: CarRequest = req.body;
-    const id = req.params.id;
-    const updatedCar = await CarEntity.query().findById(id).patch(payload).returning("*");
+  async updateCar(req: Request, res: Response) {
+    try {
+      const payload: CarRequest = req.body;
+      const id = req.params.id;
+      // const updatedCar = await CarEntity.query().findById(id).patch(payload).returning("*");
+      const carToUpdate: Car = {
+        name: payload.name,
+        price: payload.price,
+        car_foto_url: payload.car_foto_url,
+      };
+      const updatedCar = await CarEntity.query().update(carToUpdate).where({ id }).returning("*");
 
-    const response: DefaultResponse = {
-      status: "UPDATED",
-      message: "Car succesfully updated",
-      data: {
-        updatedCar,
-      },
-    };
+      const response: DefaultResponse = {
+        status: "UPDATED",
+        message: "Car succesfully updated",
+        data: {
+          updatedCar,
+        },
+      };
 
-    res.status(201).send(response);
+      res.status(201).send(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async deleteCar(req: Request, res: Response) {

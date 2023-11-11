@@ -1,5 +1,5 @@
 import express, { Application } from "express";
-import uploadFileUtil from "./utils/uploadFile";
+import uploadCloudUtil from "./utils/uploadCloud";
 import CarsHandler from "./handlers/cars";
 // import cloudinary from "../config/cloudinary";
 
@@ -15,9 +15,9 @@ const carsHandler = new CarsHandler();
 // Show List Cars
 app.get("/api/cars", carsHandler.getCars);
 // Create New Car
-app.post("/api/cars", uploadFileUtil.single("car_foto_url"), carsHandler.createCar);
+app.post("/api/cars", uploadCloudUtil.single("car_foto_url"), carsHandler.createCar);
 // Update Car Info
-app.put("api/cars/:id", carsHandler.updateCar);
+app.put("/api/cars/:id", carsHandler.updateCar);
 // Delete Car
 app.delete("/api/cars/:id", carsHandler.deleteCar);
 
