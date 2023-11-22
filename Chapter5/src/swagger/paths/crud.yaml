@@ -1,0 +1,109 @@
+# paths:
+#   /api/cars:
+#     get:
+#       summary: Get List Cars
+#       tags:
+#         - Cars
+#       consumes:
+#         - application/json
+#       requestBody:
+#         required: true
+#         content:
+#           "application/json":
+#             schema:
+#               $ref: "#/components/schemas/AuthLoginRequest"
+#       produces:
+#         - application/json
+#       responses:
+#         200:
+#           description: Access token
+#           content:
+#             "application/json":
+#               schema:
+#                 allOf:
+#                   - $ref: "#/components/schemas/Default"
+#                   - properties:
+#                       data:
+#                         allOf:
+#                           - $ref: "#/components/schemas/AuthLoginResponse"
+#   /api/cars:
+#     post:
+#       summary: Create Cars
+#       tags:
+#         - Cars
+#       consumes:
+#         - application/json
+#       requestBody:
+#         required: true
+#         content:
+#           "application/json":
+#             schema:
+#               $ref: "#/components/schemas/AuthLoginRequest"
+#       produces:
+#         - application/json
+#       responses:
+#         201:
+#           description: Access token
+#           content:
+#             "application/json":
+#               schema:
+#                 allOf:
+#                   - $ref: "#/components/schemas/Default"
+#                   - properties:
+#                       data:
+#                         allOf:
+#                           - $ref: "#/components/schemas/AuthLoginResponse"
+#   /api/cars/:id:
+#     put:
+#       summary: Update Car Info
+#       tags:
+#         - Cars
+#       consumes:
+#         - application/json
+#       requestBody:
+#         required: true
+#         content:
+#           "application/json":
+#             schema:
+#               $ref: "#/components/schemas/AuthLoginRequest"
+#       produces:
+#         - application/json
+#       responses:
+#         200:
+#           description: Access token
+#           content:
+#             "application/json":
+#               schema:
+#                 allOf:
+#                   - $ref: "#/components/schemas/Default"
+#                   - properties:
+#                       data:
+#                         allOf:
+#                           - $ref: "#/components/schemas/AuthLoginResponse"
+#   /api/cars/:id:
+#     delete:
+#       summary: Login User
+#       tags:
+#         - Cars
+#       consumes:
+#         - application/json
+#       requestBody:
+#         required: true
+#         content:
+#           "application/json":
+#             schema:
+#               $ref: "#/components/schemas/AuthLoginRequest"
+#       produces:
+#         - application/json
+#       responses:
+#         200:
+#           description: Access token
+#           content:
+#             "application/json":
+#               schema:
+#                 allOf:
+#                   - $ref: "#/components/schemas/Default"
+#                   - properties:
+#                       data:
+#                         allOf:
+#                           - $ref: "#/components/schemas/AuthLoginResponse"
