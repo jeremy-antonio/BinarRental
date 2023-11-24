@@ -1,6 +1,6 @@
 import { promises } from "dns";
 import cloudinary from "../../config/cloudinary";
-import { CarRequest, CarResponse } from "../models/dto/car";
+import { CarRequest } from "../models/dto/car";
 import { Car } from "../models/entity/car";
 import CarsRepository from "../repositories/cars";
 import { UserEntity } from "../models/entity/user";

@@ -67,7 +67,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     if (!payload.email) {
@@ -91,7 +91,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     if (!payload.password) {
@@ -103,7 +103,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     const registeredUser = await AuthService.register(payload);
@@ -115,7 +115,7 @@ class AuthHandler {
         data: null,
       };
 
-      res.status(registeredUser.httpCode).send(response);
+      return res.status(registeredUser.httpCode).send(response);
     } else {
       const response: DefaultResponse = {
         status: "CREATED",
@@ -125,7 +125,7 @@ class AuthHandler {
         },
       };
 
-      res.status(201).send(response);
+      return res.status(201).send(response);
     }
   }
 
@@ -143,7 +143,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     if (!payload.email) {
@@ -155,7 +155,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     if (!payload.role) {
@@ -167,10 +167,10 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
-    if (payload.role === "admin" || "superadmin") {
+    if (payload.role === "admin" || payload.role === "superadmin") {
       const response: DefaultResponse = {
         status: "BAD_REQUEST",
         message: "User cannot be registered",
@@ -179,7 +179,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     if (!payload.password) {
@@ -191,7 +191,7 @@ class AuthHandler {
         },
       };
 
-      res.status(400).send(response);
+      return res.status(400).send(response);
     }
 
     const registeredUser = await AuthService.register(payload);
@@ -203,7 +203,7 @@ class AuthHandler {
         data: null,
       };
 
-      res.status(registeredUser.httpCode).send(response);
+      return res.status(registeredUser.httpCode).send(response);
     } else {
       const response: DefaultResponse = {
         status: "CREATED",

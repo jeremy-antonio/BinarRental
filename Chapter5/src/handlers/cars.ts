@@ -18,13 +18,13 @@ class CarsHandler {
       },
     };
 
-    return res.status(200).send(response);
+    res.status(200).send(response);
   }
 
   async createCar(req: Request, res: Response) {
     try {
       const payload: CarRequest = req.body;
-      payload.car_foto_url = req.file;
+      // payload.car_foto_url = req.file;
 
       // Payload validation
       if (!payload.name) {
