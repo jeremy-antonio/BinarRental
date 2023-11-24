@@ -1,5 +1,6 @@
 import { raw } from "objection";
 import { Car, CarEntity } from "../models/entity/car";
+import { UserEntity } from "../models/entity/user";
 
 class CarsRepository {
   // Get Car
@@ -8,6 +9,7 @@ class CarsRepository {
 
     if (queryName) {
       listCar = await CarEntity.query().where(raw('lower("name")'), "like", `%${queryName}%`);
+      // .withGraphFetched("[created_by, updated_by, deleted_by]")
     } else {
       listCar = await CarEntity.query();
     }
@@ -22,6 +24,10 @@ class CarsRepository {
       name: car.name,
       price: car.price,
       car_foto_url: car.car_foto_url,
+      // created_by_id: car.created_by_id,
+      // updated_by_id: car.updated_by_id,
+      // deleted_by_id: car.deleted_by_id,
+      // deleted_at: car.deleted_at,
     });
 
     return createdCar;
@@ -29,10 +35,7 @@ class CarsRepository {
 
   // static async updateCar() {}
 
-  // static async deleteCar() {
-  //   const deletedCar = await CarEntity.query().deleteById(id).returning("*");
-  //   return deletedCar || null;
-  // }
+  // static async deleteCar() {}
 }
 
 export default CarsRepository;

@@ -1,8 +1,9 @@
 import { promises } from "dns";
 import cloudinary from "../../config/cloudinary";
-import { CarRequest } from "../models/dto/car";
+import { CarRequest, CarResponse } from "../models/dto/car";
 import { Car } from "../models/entity/car";
 import CarsRepository from "../repositories/cars";
+import { UserEntity } from "../models/entity/user";
 
 class CarsService {
   static async getCars(queryName: string): Promise<Car[]> {
@@ -17,7 +18,7 @@ class CarsService {
       const uploadedFile = await cloudinary.uploader.upload(file);
 
       const carToCreate: Car = {
-        id: car.id,
+        id: car.id as number,
         name: car.name,
         price: car.price,
         car_foto_url: uploadedFile.url,

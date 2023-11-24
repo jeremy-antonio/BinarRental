@@ -18,7 +18,7 @@ class CarsHandler {
       },
     };
 
-    res.status(200).send(response);
+    return res.status(200).send(response);
   }
 
   async createCar(req: Request, res: Response) {

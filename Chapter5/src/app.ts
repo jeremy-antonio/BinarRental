@@ -24,22 +24,22 @@ const swaggerSpec = swaggerJSDoc(swaggerConfig);
 app.use("/api-docs", SwaggerUi.serve, SwaggerUi.setup(swaggerSpec));
 
 // Define routes
-// CRUD Cars add more middleware
-app.get("/api/cars", carsHandler.getCars);
-app.post("/api/cars", uploadCloudUtil.single("car_foto_url"), carsHandler.createCar);
-app.put("/api/cars/:id", carsHandler.updateCar);
-app.delete("/api/cars/:id", carsHandler.deleteCar);
+// CRUD Cars
+app.get("/api/cars", AuthMiddleware.authenticate, AuthMiddleware.checkSuperAdminOrAdmin, carsHandler.getCars);
+app.post("/api/cars", AuthMiddleware.authenticate, AuthMiddleware.checkSuperAdminOrAdmin, uploadCloudUtil.single("car_foto_url"), carsHandler.createCar);
+app.put("/api/cars/:id", AuthMiddleware.authenticate, AuthMiddleware.checkSuperAdminOrAdmin, carsHandler.updateCar);
+app.delete("/api/cars/:id", AuthMiddleware.authenticate, AuthMiddleware.checkSuperAdminOrAdmin, carsHandler.deleteCar);
 
 // Public get list cars
-// app.get("/api/cars", carsHandler.getCars);
+app.get("/api/cars/public", carsHandler.getCars);
 
 // Super Admin
-// app.post("/api/auth/registeradmin", authHandler.)
-app.post("/api/auth/login/superadmin");
+app.post("/api/auth/login/superadmin", authHandler.loginSuperAdmin);
+app.post("/api/auth/registeradmin", AuthMiddleware.authenticate, AuthMiddleware.checkSuperAdmin, authHandler.registerAdmin);
 
 // Users
-app.post("/api/auth/register", authHandler.register);
-app.post("/api/auth/login", authHandler.login);
+app.post("/api/auth/register/user", authHandler.register);
+app.post("/api/auth/login/user", authHandler.login);
 
 // Check user token
 app.get("/api/auth/me", AuthMiddleware.authenticate, authHandler.getLoggedInUser);

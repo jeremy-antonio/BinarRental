@@ -30,6 +30,65 @@ class AuthService {
         throw new Error("wrong password");
       }
 
+      if (user.role === "super admin") {
+        throw new Error("super admin cant login here");
+      }
+
+      // Generate token JWT
+      const jwtSecret = "SECRET";
+      const jwtExpireTime = "24h";
+
+      const accessToken = jwt.sign(
+        {
+          email: user.email,
+        },
+        jwtSecret,
+        {
+          expiresIn: jwtExpireTime,
+        }
+      );
+
+      const token: Auth = {
+        access_token: accessToken,
+      };
+
+      return token;
+    } catch (error: any) {
+      // If something is wrong, return the error
+      const errorResponse: ErrorResponse = {
+        httpCode: 400,
+        message: error.message,
+      };
+
+      return errorResponse;
+    }
+  }
+
+  static async loginSuperAdmin(req: LoginRequest): Promise<Auth | ErrorResponse> {
+    try {
+      // Validate fields existence
+      if (!req.email) throw new Error("email cannot be empty");
+      if (!req.password) throw new Error("password cannot be empty");
+      if (req.password.length < 6) throw new Error("password length should be more than 6");
+
+      // Check if email is exist
+      const user = await UsersRepository.getUserByEmail(req.email);
+
+      if (!user) {
+        throw new Error("user doesn't exist");
+      }
+
+      // Check if password is correct
+      const isPasswordCorrect = bcrypt.compareSync(req.password, user.password as string);
+
+      if (!isPasswordCorrect) {
+        throw new Error("wrong password");
+      }
+
+      if (user.role !== "super admin") {
+        throw new Error("User is not super admin");
+      }
+
       // Generate token JWT
       const jwtSecret = "SECRET";
       const jwtExpireTime = "24h";

@@ -45,8 +45,35 @@ class AuthMiddleware {
     }
   }
 
-  static async checkSuperAdmin(req: Request, res: Response, next: NextFunction) {}
-  static async checkSuperAdminOrAdmin(req: Request, res: Response, next: NextFunction) {}
+  static async checkSuperAdmin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user;
+
+      if (user.role === "super admin") {
+        next();
+      } else {
+        res.status(403).json({ error: "Permission denied. Super Admin role required." });
+      }
+    } catch (error) {
+      console.error("Error in middleware:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
+  static async checkSuperAdminOrAdmin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user;
+
+      if (user && (user.role === "super admin" || user.role === "admin")) {
+        next();
+      } else {
+        res.status(403).json({ error: "Permission denied. Superadmin or admin role required." });
+      }
+    } catch (error) {
+      console.error("Error in middleware:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 }
 
 export default AuthMiddleware;
