@@ -44,6 +44,10 @@ class AuthMiddleware {
       });
     }
   }
+
+  static async authenticateAdmin(req: Request, res: Response, next: NextFunction){
+    
+  };
 }
 
 export default AuthMiddleware;

@@ -4,7 +4,8 @@ import knexInstance from "../../../config/postgresql";
 export class UserEntity extends Model {
   id?: number;
   email!: string;
-  name!: string;
+  username!: string;
+  role!: string;
   profile_picture_url?: string;
   password?: string;
 

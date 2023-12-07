@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { DefaultResponse } from "../models/dto/default";
-import { LoginRequest, RegisterRequest } from "../models/dto/auth";
+import { AuthRequest, RegisterRequest } from "../models/dto/auth";
 import AuthService from "../services/auth";
 import { isErrorType } from "../utils/checker";
 
 class AuthHandler {
   async login(req: Request, res: Response) {
-    const payload: LoginRequest = req.body;
+    const payload: AuthRequest = req.body;
 
     const loginResponse = await AuthService.login(payload);
 
@@ -45,7 +45,7 @@ class AuthHandler {
       res.status(400).send(response);
     }
 
-    if (!payload.name) {
+    if (!payload.username) {
       const response: DefaultResponse = {
         status: "BAD_REQUEST",
         message: "Name cannot be empty",
@@ -102,6 +102,30 @@ class AuthHandler {
     };
 
     res.status(200).send(response);
+  }
+
+  async loginGoogle(req: Request, res: Response) {
+    const googleAccessToken = req.query.access_token as string;
+
+    const loginGoogleResponse = await AuthService.loginGoogle(googleAccessToken);
+
+    if (isErrorType(loginGoogleResponse)) {
+      const response: DefaultResponse = {
+        status: "BAD_REQUEST",
+        message: loginGoogleResponse.message,
+        data: null,
+      };
+
+      res.status(loginGoogleResponse.httpCode).send(response);
+    } else {
+      const response: DefaultResponse = {
+        status: "OK",
+        message: "User logged in succesfully",
+        data: loginGoogleResponse,
+      };
+
+      res.status(200).send(response);
+    }
   }
 }
 

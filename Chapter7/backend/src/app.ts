@@ -8,7 +8,8 @@ import swaggerJsdoc from "swagger-jsdoc";
 import { swaggerConfig } from "./utils/swaggerOption";
 import dotenv from "dotenv";
 import cors from "cors";
-import TweetsHandler from "./handlers/tweets";
+import CarsHandler from "./handlers/cars";
+// import TweetsHandler from "./handlers/tweets";
 dotenv.config();
 
 const app: Application = express();
@@ -19,7 +20,8 @@ app.use(cors());
 // Init handlers
 const usersHandler = new UsersHandler();
 const authHandler = new AuthHandler();
-const tweetsHandler = new TweetsHandler();
+const carsHandler = new CarsHandler();
+// const tweetsHandler = new TweetsHandler();
 
 // Swagger
 const swaggerSpec = swaggerJsdoc(swaggerConfig);
@@ -45,42 +47,11 @@ app.post("/api/auth/register", authHandler.register);
 app.post("/api/auth/login", authHandler.login);
 app.get("/api/auth/me", AuthMiddleware.authenticate, authHandler.getLoggedInUser);
 
-// Tweets
-app.get("/api/tweets", tweetsHandler.getTweets);
-app.post("/api/tweets", AuthMiddleware.authenticate, tweetsHandler.createTweet);
-
-// TODO:
-// -- Users
-// 1. Delete user by id endpoint
-// 2. Get user by id endpoint
-
-// -- Categories
-// 1. Create category
-// 2. Get all categories
-
-// -- Tweets
-// 1. Create tweet
-//  -> Create tweet_categories
-// 2. Get all tweets
-//  -> response // opsional
-// {
-//   "id",
-//   "content",
-//   "user"
-//    ->
-//    {
-//       "id",
-//       "name"
-//    }
-//   "categories" -> ['category_name']
-// }
-
-// TODO: 17 November 2023
-// 1. Create swagger docs for api get list users & create user
-// 2. Please add 'role' field for each registration
-// User data:
-// id, role ('admin' | 'user'), name, email, password, profile_picture_url
-// 3. Please add middleware for endpoint get list user for checking user role (please makesure he is an 'admin')
+// Cars
+app.get("/api/cars", carsHandler.getAllCars);
+app.post("/api/cars", AuthMiddleware.authenticateAdmin, carsHandler.createCar);
+app.patch("/api/cars/:id", AuthMiddleware.authenticateAdmin, carsHandler.updateCar);
+app.delete("/api/cars/:id", AuthMiddleware.authenticateAdmin, carsHandler.deleteCar);
 
 app.listen(process.env.APP_PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.APP_PORT}`);
