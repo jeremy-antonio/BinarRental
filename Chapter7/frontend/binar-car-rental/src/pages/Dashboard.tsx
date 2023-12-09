@@ -8,16 +8,23 @@ const { Header, Sider, Content } = Layout;
 export default function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
           onClick={({ key }) => {
-            navigate(key);
+            if (key == "/") {
+              localStorage.removeItem("token");
+              navigate(key);
+            } else {
+              navigate(key);
+            }
           }}
           theme="dark"
           mode="inline"

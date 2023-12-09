@@ -1,19 +1,18 @@
 import { Model, ModelObject } from "objection";
-import knexInstance from "../../../config/postgresql";
+import postgresqlInstance from "../../../config/postgresql";
 
 export class UserEntity extends Model {
   id?: number;
-  email!: string;
   username!: string;
+  email!: string;
+  password!: string;
   role!: string;
-  profile_picture_url?: string;
-  password?: string;
 
   static get tableName() {
     return "users";
   }
 }
 
-Model.knex(knexInstance);
+Model.knex(postgresqlInstance);
 
 export type User = ModelObject<UserEntity>;

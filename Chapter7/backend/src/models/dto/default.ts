@@ -4,4 +4,9 @@ interface DefaultResponse {
   data: any;
 }
 
-export { DefaultResponse };
+interface ErrorResponse {
+  httpCode: number;
+  message: string;
+}
+
+export { DefaultResponse, ErrorResponse };

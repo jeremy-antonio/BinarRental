@@ -1,9 +1,8 @@
-interface Auth {
-  access_token: string;
-}
-
 interface TokenPayload {
+  id: number;
+  username: string;
   email: string;
+  role: string;
 }
 
-export { Auth, TokenPayload };
+export { TokenPayload };

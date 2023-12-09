@@ -4,7 +4,7 @@ import CarRequest from "../models/dto/car";
 class CarsRepository {
   static async getAllCars(): Promise<Car[]> {
     try {
-      const cars = await CarEntity.query();
+      const cars = await CarEntity.query().whereNull("deleted_at");
       return cars;
     } catch (error) {
       throw error;
@@ -26,7 +26,7 @@ class CarsRepository {
       const date = new Date();
       const newCar = await CarEntity.query().insert({
         name: car.name,
-        rent_per_day: car.rent_per_day,
+        cost_per_day: car.cost_per_day,
         size: car.size,
         car_picture_url: car.car_picture_url,
         created_by: adminId,
@@ -43,7 +43,7 @@ class CarsRepository {
       const date = new Date();
       const updatedCar = await CarEntity.query().where("id", id).update({
         name: car.name,
-        rent_per_day: car.rent_per_day,
+        cost_per_day: car.cost_per_day,
         size: car.size,
         car_picture_url: car.car_picture_url,
         updated_at: date,

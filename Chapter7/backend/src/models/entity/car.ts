@@ -4,7 +4,7 @@ import postgresqlInstance from "../../../config/postgresql";
 export class CarEntity extends Model {
   id?: number;
   name!: string;
-  rent_per_day!: bigint;
+  cost_per_day!: bigint;
   size!: string;
   car_picture_url!: string;
   created_by?: number;

@@ -1,130 +1,83 @@
+import AuthService from "../services/auth";
+import { AuthGoogle, AuthRequest } from "../models/dto/auth";
 import { Request, Response } from "express";
 import { DefaultResponse } from "../models/dto/default";
-import { AuthRequest, RegisterRequest } from "../models/dto/auth";
-import AuthService from "../services/auth";
-import { isErrorType } from "../utils/checker";
+import UserService from "../services/users";
+import { User } from "../models/entity/user";
+import { BadRequestError } from "../utils/errorclass";
 
 class AuthHandler {
   async login(req: Request, res: Response) {
-    const payload: AuthRequest = req.body;
-
-    const loginResponse = await AuthService.login(payload);
-
-    if (isErrorType(loginResponse)) {
-      const response: DefaultResponse = {
-        status: "BAD_REQUEST",
-        message: loginResponse.message,
-        data: null,
+    try {
+      const { email, password } = req.body;
+      if (!(email && password)) {
+        throw new BadRequestError("Missing Field");
+      }
+      const payload: AuthRequest = {
+        email: email,
+        password: password,
       };
-
-      res.status(loginResponse.httpCode).send(response);
-    } else {
-      const response: DefaultResponse = {
+      const token = await AuthService.login(payload);
+      return res.status(200).send({
         status: "OK",
-        message: "User logged in succesfully",
-        data: loginResponse,
+        message: "Login success",
+        data: {
+          token: "Bearer " + token,
+        },
+      });
+    } catch (error: any) {
+      const response: DefaultResponse = {
+        status: error.name,
+        message: error.message,
+        data: [],
       };
-
-      return res.status(200).send(response);
+      return res.status(error.statusCode || 500).send(response);
     }
   }
-
-  async register(req: Request, res: Response) {
-    const payload: RegisterRequest = req.body;
-
-    // Payload validation
-    if (!payload.email) {
-      const response: DefaultResponse = {
-        status: "BAD_REQUEST",
-        message: "Email cannot be empty",
+  async currentUser(req: Request, res: Response) {
+    try {
+      const user: User = await UserService.getUserById(req.user.id || 0);
+      return res.status(200).send({
+        status: "OK",
+        message: "Current user",
         data: {
-          registered_user: null,
+          current_user: user,
         },
-      };
-
-      res.status(400).send(response);
-    }
-
-    if (!payload.username) {
+      });
+    } catch (error: any) {
       const response: DefaultResponse = {
-        status: "BAD_REQUEST",
-        message: "Name cannot be empty",
-        data: {
-          registered_user: null,
-        },
+        status: error.name,
+        message: error.message,
+        data: [],
       };
-
-      return res.status(400).send(response);
+      return res.status(error.statusCode || 500).send(response);
     }
-
-    if (!payload.password) {
-      const response: DefaultResponse = {
-        status: "BAD_REQUEST",
-        message: "Password cannot be empty",
-        data: {
-          created_user: null,
-        },
-      };
-
-      return res.status(400).send(response);
-    }
-
-    const registeredUser = await AuthService.register(payload);
-
-    if (isErrorType(registeredUser)) {
-      const response: DefaultResponse = {
-        status: "BAD_REQUEST",
-        message: registeredUser.message,
-        data: null,
-      };
-
-      res.status(registeredUser.httpCode).send(response);
-    } else {
-      const response: DefaultResponse = {
-        status: "CREATED",
-        message: "User registered succesfully",
-        data: {
-          registered_user: registeredUser,
-        },
-      };
-
-      res.status(201).send(response);
-    }
-  }
-
-  async getLoggedInUser(req: Request, res: Response) {
-    const response: DefaultResponse = {
-      status: "OK",
-      message: "User logged in succesfully",
-      data: {
-        user: req.user,
-      },
-    };
-
-    res.status(200).send(response);
   }
 
   async loginGoogle(req: Request, res: Response) {
-    const googleAccessToken = req.query.access_token as string;
-
-    const loginGoogleResponse = await AuthService.loginGoogle(googleAccessToken);
-
-    if (isErrorType(loginGoogleResponse)) {
-      const response: DefaultResponse = {
-        status: "BAD_REQUEST",
-        message: loginGoogleResponse.message,
-        data: null,
+    try {
+      const auth: AuthGoogle = {
+        credential: req.body.credential,
+        clientId: req.body.clientId,
       };
-
-      res.status(loginGoogleResponse.httpCode).send(response);
-    } else {
-      const response: DefaultResponse = {
+      if (!(auth.credential && auth.clientId)) {
+        throw new BadRequestError("Missing Field");
+      }
+      const token = await AuthService.loginGoogle(auth);
+      return res.status(200).send({
         status: "OK",
-        message: "User logged in succesfully",
-        data: loginGoogleResponse,
+        message: "Login success",
+        data: {
+          token: "Bearer " + token,
+        },
+      });
+    } catch (error: any) {
+      const response: DefaultResponse = {
+        status: error.name,
+        message: error.message,
+        data: [],
       };
-
-      res.status(200).send(response);
+      return res.status(error.statusCode || 500).send(response);
     }
   }
 }

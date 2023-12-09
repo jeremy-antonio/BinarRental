@@ -1,55 +1,86 @@
-import cloudinary from "../../config/cloudinary";
+import UserRepository from "../repositories/users";
 import { UserRequest } from "../models/dto/user";
 import { User } from "../models/entity/user";
-import UsersRepository from "../repositories/users";
+import bcrypt from "bcrypt";
+import { NotFoundError } from "../utils/errorclass";
 
-class UsersService {
-  static async getUsers(queryName: string): Promise<User[]> {
-    const listUser = await UsersRepository.getUsers(queryName);
+class UserService {
+  static async getAllUsers(): Promise<User[]> {
+    try {
+      const users: User[] = await UserRepository.getAllUsers();
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async getUserById(id: number): Promise<User> {
+    try {
+      const user: User = await UserRepository.getUserById(id);
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-    return listUser;
+  static async getUserByUsername(username: string): Promise<User> {
+    try {
+      const user = await UserRepository.getUserByUsername(username);
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async createUser(user: UserRequest): Promise<User> {
     try {
-      const fileBase64 = user.profile_picture_file?.buffer.toString("base64");
-      const file = `data:${user.profile_picture_file?.mimetype};base64,${fileBase64}`;
-
-      // Async await
-      const uploadedFile = await cloudinary.uploader.upload(file); // async
-
-      const userToCreate: User = {
+      const hashPassword = bcrypt.hashSync(user.password, 10);
+      const newUser = await UserRepository.createUser({
+        username: user.username,
         email: user.email,
-        name: user.name,
-        profile_picture_url: uploadedFile.url,
-      };
-
-      const createdUser = await UsersRepository.createUser(userToCreate);
-
-      return createdUser;
+        password: hashPassword,
+        role: user.role,
+      });
+      return newUser;
     } catch (error) {
       throw error;
     }
+  }
 
-    // Callback
-    // cloudinary.uploader.upload(file).then((uploadedFile) => {
-    //   const userToCreate: User = {
-    //     email: user.email,
-    //     name: user.name,
-    //     profile_picture_url: uploadedFile.url,
-    //   };
+  static async updateUser(id: number, user: UserRequest): Promise<User> {
+    try {
+      let findUser = await UserRepository.getUserById(id);
+      if (!findUser) {
+        throw new NotFoundError("User not found");
+      }
+      const match = bcrypt.compareSync(user.password, findUser.password);
+      if (!match) {
+        user.password = bcrypt.hashSync(user.password, 10);
+      }
+      const updatedUser = await UserRepository.updateUser(id, user);
+      return updatedUser;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-    //   UsersRepository.createUser(userToCreate)
-    //     .then((createdUser) => {
-    //       // callback 3
-    //       // callback 4 didalem callback 5
-    //       return createdUser;
-    //     })
-    //     .catch((error) => {
-    //       return error
-    //     });
-    // });
+  static async deleteUser(id: number): Promise<string> {
+    try {
+      let findUser = await UserRepository.getUserById(id);
+      if (!findUser) {
+        throw new NotFoundError("User not found");
+      }
+      const userQuery = await UserRepository.deleteUser(id);
+      return "Success";
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
-export default UsersService;
+export default UserService;

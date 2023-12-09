@@ -1,151 +1,73 @@
-import { Auth } from "../models/entity/auth";
-import { ErrorResponse } from "../models/entity/default";
-import { User } from "../models/entity/user";
-import UsersRepository from "../repositories/users";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
 import { AuthGoogle, AuthRequest } from "../models/dto/auth";
-import { AuthResponse, RegisterRequest } from "../models/dto/auth";
-
-const SALT_ROUND = 10;
+import { AuthResponse } from "../models/dto/auth";
+import { TokenPayload } from "../models/entity/auth";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import UserRepository from "../repositories/users";
+import { User } from "../models/entity/user";
+import { ErrorResponse } from "../models/dto/default";
+import { BadRequestError, NotFoundError } from "../utils/errorclass";
+import { OAuth2Client } from "google-auth-library";
 
 class AuthService {
-  static async login(req: AuthRequest): Promise<Auth | ErrorResponse> {
+  static async login(user: AuthRequest): Promise<String> {
     try {
-      // Validate fields existence
-      if (!req.email) throw new Error("email cannot be empty");
-      if (!req.password) throw new Error("password cannot be empty");
-      if (req.password.length < 8) throw new Error("password length should be more than 8");
-
-      // Check if email is exist
-      const user = await UsersRepository.getUserByEmail(req.email);
-
-      if (!user) {
-        throw new Error("user doesn't exist");
+      const findUser = await UserRepository.getUserByEmail(user.email);
+      if (!findUser) {
+        throw new NotFoundError("User not found");
       }
-
-      // Check if password is correct
-      const isPasswordCorrect = bcrypt.compareSync(req.password, user.password as string);
-
-      if (!isPasswordCorrect) {
-        throw new Error("wrong password");
+      const match = bcrypt.compareSync(user.password, findUser.password);
+      if (!match) {
+        throw new BadRequestError("Username or password is wrong");
       }
-
-      // Generate token JWT
-      const jwtSecret = "SECRET";
-      const jwtExpireTime = "24h";
-
-      const accessToken = jwt.sign(
-        {
-          email: user.email,
-        },
-        jwtSecret,
-        {
-          expiresIn: jwtExpireTime,
-        }
-      );
-
-      const token: Auth = {
-        access_token: accessToken,
+      const payload: TokenPayload = {
+        id: findUser.id || 0,
+        username: findUser.username,
+        email: findUser.email,
+        role: findUser.role,
       };
-
+      const token: String = jwt.sign(payload, process.env.JWT_SECRET || "", {
+        expiresIn: "24h",
+      });
       return token;
     } catch (error: any) {
-      // If something is wrong, return the error
-      const errorResponse: ErrorResponse = {
-        httpCode: 400,
-        message: error.message,
-      };
-
-      return errorResponse;
+      throw error;
     }
   }
 
-  static async register(req: RegisterRequest): Promise<User | ErrorResponse> {
+  static async registerAdmin(user: User): Promise<User> {
     try {
-      // Check if email is exist
-      const user = await UsersRepository.getUserByEmail(req.email);
-
-      if (user) {
-        throw new Error("user with the same email already exist");
-      }
-
-      // Encrypt password
-      const encryptedPassword = bcrypt.hashSync(req.password, SALT_ROUND);
-
-      // Store / create user to database
-      const userToCreate: User = {
-        email: req.email,
-        username: req.username,
-        role: req.role,
-        password: encryptedPassword,
-        // profile_picture_url: req.profile_picture_url,
-      };
-
-      const createdUser = await UsersRepository.createUser(userToCreate);
-
-      return createdUser;
-    } catch (error: any) {
-      // If something is wrong, return the error
-      const errorResponse: ErrorResponse = {
-        httpCode: 400,
-        message: error.message,
-      };
-
-      return errorResponse;
+      const newUser = await UserRepository.createUser(user);
+      return newUser;
+    } catch (error) {
+      throw error;
     }
   }
-
-  static async loginGoogle(googleAccessToken: string): Promise<Auth | ErrorResponse> {
+  static async loginGoogle(auth: AuthGoogle): Promise<String> {
     try {
-      // Get google user credential
-      const client = new OAuth2Client("504159366363-jg775b5lafts22j82krd9mskhk0f7kkd.apps.googleusercontent.com");
-
+      const client = new OAuth2Client(auth.clientId);
       const userInfo: any = await client.verifyIdToken({
-        idToken: googleAccessToken,
-        audience: "504159366363-jg775b5lafts22j82krd9mskhk0f7kkd.apps.googleusercontent.com",
+        idToken: auth.credential,
+        audience: auth.clientId,
       });
-
-      console.log("User Info", userInfo.payload);
-
       const { email, name, picture } = userInfo.payload;
 
-      // Check if email is exist
-      const user = await UsersRepository.getUserByEmail(email);
-
-      if (!user) {
-        // TODO: Create new user based on google login response
-        throw new Error("temporary error: user doesn't exist");
+      const findUser = await UserRepository.getUserByEmail(email);
+      if (!findUser) {
+        throw new NotFoundError("User not found");
       }
-
-      // Generate token JWT
-      const jwtSecret = "SECRET";
-      const jwtExpireTime = "24h";
-
-      const accessToken = jwt.sign(
-        {
-          email: user.email,
-        },
-        jwtSecret,
-        {
-          expiresIn: jwtExpireTime,
-        }
-      );
-
-      const token: Auth = {
-        access_token: accessToken,
+      const payload: TokenPayload = {
+        id: findUser.id || 0,
+        username: findUser.username,
+        email: findUser.email,
+        role: findUser.role,
       };
-
+      const token: String = jwt.sign(payload, process.env.JWT_SECRET || "", {
+        expiresIn: "24h",
+      });
       return token;
     } catch (error: any) {
-      // If something is wrong, return the error
-      const errorResponse: ErrorResponse = {
-        httpCode: 400,
-        message: error.message,
-      };
-
-      return errorResponse;
+      throw error;
     }
   }
 }

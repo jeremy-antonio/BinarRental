@@ -8,18 +8,17 @@ const cars_api_base_url = "http://localhost:8087";
 
 interface GoogleOauthResponse {
   credential?: string;
+  clientId?: string;
 }
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const handleLoginGoogleSuccess = (response: GoogleOauthResponse) => {
     console.log("response google success:", response);
-
-    // TODO: integrate with backend to save user google credential
-    // If user is valid, save the token and redirect to home page
   };
 
   return (
@@ -85,7 +84,7 @@ export default function Login() {
                           password: password,
                         };
 
-                        const response = await fetch(cars_api_base_url + "/api/auth/login", {
+                        const response = await fetch(cars_api_base_url + "/api/login", {
                           method: "post",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify(payload),
@@ -93,13 +92,12 @@ export default function Login() {
 
                         const responseJson = await response.json();
 
-                        if (response.status !== 200) {
-                          alert("error: " + responseJson.message);
+                        if (response.status == 200) {
+                          localStorage.setItem("token", responseJson.data.token);
+                          navigate("/dashboard");
+                        } else {
+                          setAlertVisible(true);
                         }
-
-                        localStorage.setItem("access_token", responseJson.data.access_token);
-
-                        navigate("/dashboard");
                       }}
                       className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#0D28A6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full"
                     >

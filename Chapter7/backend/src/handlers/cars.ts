@@ -59,12 +59,12 @@ class CarsHandler {
       const uploadedImage = await cloudinary.uploader.upload(file);
       const payload: CarRequest = {
         name: req.body.name,
-        rent_per_day: req.body.rent_per_day,
+        cost_per_day: req.body.cost_per_day,
         size: req.body.size.toUpperCase(),
         car_picture_url: uploadedImage.secure_url,
       };
 
-      if (!(payload.name || payload.rent_per_day || payload.size || payload.car_picture_url)) {
+      if (!(payload.name || payload.cost_per_day || payload.size || payload.car_picture_url)) {
         const response: DefaultResponse = {
           status: "ERROR",
           message: "Failed create data cars",
@@ -92,12 +92,12 @@ class CarsHandler {
       const uploadedImage = await cloudinary.uploader.upload(file);
       const payload: CarRequest = {
         name: req.body.name,
-        rent_per_day: req.body.rent_per_day,
+        cost_per_day: req.body.cost_per_day,
         size: req.body.size.toUpperCase(),
         car_picture_url: uploadedImage.secure_url,
       };
       const id = parseInt(req.params.id);
-      if (!(payload.name || payload.rent_per_day || payload.size || payload.car_picture_url)) {
+      if (!(payload.name || payload.cost_per_day || payload.size || payload.car_picture_url)) {
         const response: DefaultResponse = {
           status: "ERROR",
           message: "Failed update data cars",

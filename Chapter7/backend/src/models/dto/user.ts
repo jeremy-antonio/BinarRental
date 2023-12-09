@@ -1,14 +1,8 @@
 interface UserRequest {
-  name: string;
+  username: string;
   email: string;
-  profile_picture_file?: Express.Multer.File;
+  password: string;
+  role: string;
 }
 
-interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
-  profile_picture_file?: string;
-}
-
-export { UserRequest, UserResponse };
+export { UserRequest };
