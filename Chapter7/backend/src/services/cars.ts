@@ -5,6 +5,7 @@ import { Car } from "../models/entity/car";
 class CarsService {
   static async getAllCars(): Promise<Car[]> {
     try {
+      
       const cars = await CarsRepository.getAllCars();
       return cars;
     } catch (error) {

@@ -132,7 +132,7 @@ export default function Cars() {
             {listCars.map((cars: Cars) => (
               <Card className="w-[23%]" key={cars.id} cover={<img src={cars.car_picture_url} alt="" className="h-[220px]" />}>
                 <Meta title={cars.name} description={`Rp. ${cars.cost_per_day} / Hari`}></Meta>
-                <div className="flex gap-3 mt-5">
+                <div className="flex flex-wrap gap-3 mt-5">
                   <Button onClick={handleEditCarClick} icon={<EditOutlined />}>
                     Edit Car
                   </Button>
